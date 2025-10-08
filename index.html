@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday! 🎉</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .start-screen {
+            text-align: center;
+            z-index: 1000;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .start-screen h1 {
+            font-size: 3.5em;
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .start-btn {
+            padding: 20px 50px;
+            font-size: 1.5em;
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        .sticker {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            z-index: 100;
+            pointer-events: none;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .sticker img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .birthday-page {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            animation: pageReveal 1s ease-out;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #feca57 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .birthday-page h1 {
+            font-size: 5em;
+            color: white;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            animation: bounceIn 1s ease-out;
+        }
+
+        .birthday-page .name {
+            font-size: 6em;
+            color: #FFD700;
+            text-shadow: 5px 5px 10px rgba(0,0,0,0.4);
+            font-weight: bold;
+            animation: scaleIn 1.2s ease-out;
+            margin: 20px 0;
+        }
+
+        .decorations {
+            font-size: 100px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            animation: floatIn 1.5s ease-out;
+        }
+
+        .decoration-item {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .decoration-item:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .decoration-item:nth-child(3) {
+            animation-delay: 1s;
+        }
+
+        .wishes-btn {
+            padding: 15px 40px;
+            font-size: 1.3em;
+            background: linear-gradient(45deg, #FFD700 0%, #FFA500 100%);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            font-weight: bold;
+            margin-top: 40px;
+            animation: fadeInUp 2.5s ease-out;
+        }
+
+        .wishes-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        .wishes-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        .wishes-content {
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .wish-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: slideInLeft 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .wish-card:nth-child(even) {
+            animation: slideInRight 0.8s ease-out;
+            animation-fill-mode: both;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .wish-card h3 {
+            color: #FFD700;
+            font-size: 2em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .wish-card p {
+            color: white;
+            font-size: 1.2em;
+            line-height: 1.6;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .close-wishes {
+            position: sticky;
+            top: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .close-btn {
+            padding: 10px 30px;
+            font-size: 1.2em;
+            background: #f5576c;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            font-weight: bold;
+        }
+
+        .close-btn:hover {
+            background: #d63447;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            animation: confettiFall 4s linear infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes stickerExplode {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.2) rotate(0deg);
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(1) rotate(var(--rotate));
+                opacity: 1;
+            }
+        }
+
+        @keyframes pageReveal {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            60% {
+                transform: translateY(20px);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes floatIn {
+            0% {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInLeft {
+            0% {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInRight {
+            0% {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="start-screen" id="startScreen">
+        <h1>🎊 Something Special Awaits! 🎊</h1>
+        <button class="start-btn" id="startBtn">🎉 START 🎉</button>
+    </div>
+
+    <div class="birthday-page" id="birthdayPage">
+        <h1>🎉 HAPPY BIRTHDAY 🎉</h1>
+        <div class="name">RISHIKA</div>
+        <div class="decorations">
+            <span class="decoration-item">🎂</span>
+            <span class="decoration-item">🎈</span>
+            <span class="decoration-item">🎁</span>
+            <span class="decoration-item">🎊</span>
+            <span class="decoration-item">🎉</span>
+        </div>
+        <button class="wishes-btn" id="wishesBtn">💌 See The Wishes 💌</button>
+    </div>
+
+    <div class="wishes-container" id="wishesContainer">
+        <div class="wishes-content">
+            <div class="close-wishes">
+                <button class="close-btn" id="closeBtn">✕ Close</button>
+            </div>
+            
+            <div class="wish-card" style="animation-delay: 0.1s;">
+                <h3>❤️ Prateek</h3>
+                <p>Happy Birthday, Rishika! 🎉 Wishing you endless joy, love, and beautiful surprises on your special day. Over time, we’ve all become more like a family, celebrating each other’s highs, standing together through the lows, and creating memories that last a lifetime. Today, it’s your day, and we’re so happy to celebrate you! Keep shining bright, keep spreading your positivity May God bless you always with success, peace, and love.</p>
+            </div>
+
+            <div class="wish-card" style="animation-delay: 0.2s;">
+                <h3>❤️ Shashwat</h3>
+                <p>SIH समूह की महत्वपूर्ण सदस्य, उत्कृष्ट वक्ता और उच्च स्तरीय कौशल एवं ज्ञान की धनी , ऋषिका उर्फ पांडेय जी को जन्मदिवस की हार्दिक शुभकामनाएं एवं सुभाशीष। ईश्वर आप पर अपना अपार स्नेह व आशीर्वाद बनाएं रखें ।</p>
+            </div>
+
+            <div class="wish-card" style="animation-delay: 0.3s;">
+                <h3>🌟 Luv</h3>
+                <p>Happy Birthday to the most wonderful person! Rishika, you bring so much light and positivity into everyone's lives. May this year bring you closer to all your dreams. Celebrate big today because you deserve it all!</p>
+            </div>
+
+            <div class="wish-card" style="animation-delay: 0.4s;">
+                <h3>🌟 Sudhanshu</h3>
+                <p>Happy Birthday Rishika! Your kindness and energy inspire everyone around you. May this new chapter be filled with success, laughter, and amazing experiences. Here's to another year of greatness. Enjoy your special day!</p>
+            </div>
+
+            <div class="wish-card" style="animation-delay: 0.5s;">
+                <h3>🌟 Abhishek Thakur</h3>
+                <p>Warmest birthday wishes to you, Rishika! May your day be as fantastic as you are. Keep chasing your dreams and making incredible memories. Wishing you health, happiness, and all the success you deserve. Have an amazing birthday!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const startBtn = document.getElementById('startBtn');
+        const startScreen = document.getElementById('startScreen');
+        const birthdayPage = document.getElementById('birthdayPage');
+        const wishesBtn = document.getElementById('wishesBtn');
+        const wishesContainer = document.getElementById('wishesContainer');
+        const closeBtn = document.getElementById('closeBtn');
+
+        // Create audio element for birthday music
+        const birthdayMusic = new Audio('music.mp3');
+        birthdayMusic.loop = true;
+
+        // WhatsApp sticker images from your stickers folder
+        const stickerImages = [
+            'Screenshot 2025-10-08 203048.png',
+            '1.png',
+            '2.png',
+            '3.png',
+            '4.png',
+            '5.png',
+            '6.png',
+            '7.png',
+            '8.png',
+            '9.png',
+            '10.png',
+            '11.png',
+            '12.png',
+            '13.png',
+            '14.png',
+            '15.png'
+        ];
+
+        function createSticker() {
+            const sticker = document.createElement('div');
+            sticker.className = 'sticker';
+            
+            const img = document.createElement('img');
+            img.src = stickerImages[Math.floor(Math.random() * stickerImages.length)];
+            img.alt = 'Birthday Sticker';
+            
+            sticker.appendChild(img);
+            
+            // Calculate random direction from center
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 600 + Math.random() * 400;
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance;
+            const rotate = Math.random() * 720 - 360;
+            
+            sticker.style.setProperty('--tx', `${tx}px`);
+            sticker.style.setProperty('--ty', `${ty}px`);
+            sticker.style.setProperty('--rotate', `${rotate}deg`);
+            sticker.style.animation = `stickerExplode ${2 + Math.random()}s ease-out forwards`;
+            
+            document.body.appendChild(sticker);
+
+            setTimeout(() => {
+                sticker.style.transition = 'opacity 0.5s';
+                sticker.style.opacity = '0';
+                setTimeout(() => sticker.remove(), 500);
+            }, 4000);
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * window.innerWidth + 'px';
+                    confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    birthdayPage.appendChild(confetti);
+
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 30);
+            }
+        }
+
+        startBtn.addEventListener('click', function() {
+            // Start the music
+            birthdayMusic.play().catch(error => {
+                console.log('Music autoplay prevented:', error);
+            });
+
+            startScreen.style.animation = 'fadeIn 0.5s ease-out reverse';
+            
+            setTimeout(() => {
+                startScreen.classList.add('hidden');
+            }, 500);
+
+            // Create multiple stickers exploding from center
+            for (let i = 0; i < 40; i++) {
+                setTimeout(() => {
+                    createSticker();
+                }, i * 150);
+            }
+
+            // Show birthday page after stickers animation
+            setTimeout(() => {
+                birthdayPage.style.display = 'flex';
+                birthdayPage.style.flexDirection = 'column';
+                birthdayPage.style.justifyContent = 'center';
+                birthdayPage.style.alignItems = 'center';
+                createConfetti();
+                
+                // Continue confetti
+                setInterval(createConfetti, 5000);
+            }, 6500);
+        });
+
+        // Wishes button functionality
+        wishesBtn.addEventListener('click', function() {
+            wishesContainer.style.display = 'block';
+        });
+
+        closeBtn.addEventListener('click', function() {
+            wishesContainer.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
